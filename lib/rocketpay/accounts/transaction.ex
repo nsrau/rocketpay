@@ -3,6 +3,7 @@ defmodule Rocketpay.Accounts.Transaction do
 
   alias Rocketpay.Repo
   alias Rocketpay.Accounts.Operation
+  alias Rocketpay.Accounts.Transactions.Response, as: TransactionResponse
 
   def call(%{"from" => from_id, "to" => to_id, "value" => value}) do
     withdraw_params = build_params(from_id, value)
@@ -22,7 +23,7 @@ defmodule Rocketpay.Accounts.Transaction do
         {:error, reason}
 
       {:ok, %{deposit: to_account, withdraw: from_account}} ->
-        {:ok, %{to_account: to_account, from_account: from_account}}
+        {:ok, TransactionResponse.build(from_account, to_account)}
     end
   end
 end
